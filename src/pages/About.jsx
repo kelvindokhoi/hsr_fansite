@@ -73,6 +73,7 @@ function About() {
             <li>GSAP for animations</li>
             <li>Custom CSS animations</li>
             <li>React Router</li>
+            <li>ReactBit's Opensource UI components</li>
           </ul>
           
           <p style={{ marginTop: '2rem', fontStyle: 'italic', marginBottom: '3rem' }}>
