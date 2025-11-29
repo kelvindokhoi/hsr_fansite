@@ -1,36 +1,35 @@
 import { Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';  // Updated import
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import About from './pages/About';
 import Login from './pages/Login';
-import CharacterList from './pages/CharacterListPage';
-import './App.css';
+import CharacterListPage from './pages/CharacterListPage';
+import './css/App.css';
 
 function App() {
   return (
-    <AuthProvider>
+    <AuthProvider>  {/* Wrap your app with AuthProvider */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         {/* Protected routes */}
-        <Route 
-          path="/character-list" 
+        <Route
+          path="/character-list"
           element={
             <ProtectedRoute>
-              <CharacterList />
+              <CharacterListPage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/gacha-pulling" 
+        <Route
+          path="/gacha-pulling"
           element={
             <ProtectedRoute>
-              {/* <GachaPulling /> - Create this later */}
               <div>Gacha Pulling Page (Protected)</div>
             </ProtectedRoute>
-          } 
+          }
         />
       </Routes>
     </AuthProvider>

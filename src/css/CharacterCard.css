@@ -137,14 +137,18 @@
 
 .tooltip-details {
   display: flex;
-  gap: 8px;
   align-items: center;
+  gap: 8px;
 }
 
-.tooltip-element,
-.tooltip-path {
+.tooltip-element {
   width: 24px;
   height: 24px;
+}
+
+.tooltip-path-text {
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .tooltip-description {

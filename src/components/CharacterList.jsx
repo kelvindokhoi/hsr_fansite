@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import CharacterCard from './CharacterCard';
-import './CharacterList.css';
+import '../css/CharacterList.css';
 
 const CharacterList = ({ characters }) => {
   const [activeFilters, setActiveFilters] = useState({
@@ -106,6 +106,10 @@ const CharacterList = ({ characters }) => {
     setCurrentPage(1);
   };
 
+  // Available elements and paths for filtering
+  const availableElements = ['Fire', 'Ice', 'Imaginary', 'Lightning', 'Physical', 'Quantum', 'Wind'];
+  const availablePaths = ['Abundance', 'Destruction', 'Erudition', 'Harmony', 'Nihility', 'Preservation', 'The Hunt'];
+
   return (
     <div className="character-list-container">
       {/* Filter Controls */}
@@ -113,7 +117,7 @@ const CharacterList = ({ characters }) => {
         <div className="filter-group">
           <h3>Element</h3>
           <div className="filter-buttons">
-            {elements.map(element => (
+            {availableElements.map(element => (
               <button
                 key={element}
                 className={`filter-button ${activeFilters.elements.includes(element) ? 'active' : ''}`}
@@ -133,18 +137,14 @@ const CharacterList = ({ characters }) => {
         <div className="filter-group">
           <h3>Path</h3>
           <div className="filter-buttons">
-            {paths.map(path => (
+            {availablePaths.map(path => (
               <button
                 key={path}
                 className={`filter-button ${activeFilters.paths.includes(path) ? 'active' : ''}`}
                 onClick={() => togglePath(path)}
                 aria-pressed={activeFilters.paths.includes(path)}
               >
-                <img
-                  src={`/images/${path}.png`}
-                  alt={`${path} path`}
-                  className="filter-icon"
-                />
+                {path}
               </button>
             ))}
           </div>

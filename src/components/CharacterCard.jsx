@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './CharacterCard.css';
+import '../css/CharacterCard.css';
 
 const CharacterCard = ({ character }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -14,7 +14,6 @@ const CharacterCard = ({ character }) => {
   const portraitPath = `/images/${character.imageName}_portrait.png`;
   const avatarPath = `/images/${character.imageName}_avatar.png`;
   const elementPath = `/images/${character.element}.png`;
-  const pathPath = `/images/${character.path}.png`;
 
   return (
     <div
@@ -32,6 +31,9 @@ const CharacterCard = ({ character }) => {
           alt={`${character.element} element`}
           className="element-icon"
           loading="lazy"
+          onError={(e) => {
+            e.target.src = '/images/Unknown.png';
+          }}
         />
 
         <img
@@ -39,6 +41,9 @@ const CharacterCard = ({ character }) => {
           alt={`${character.name} portrait`}
           className="portrait-image"
           loading="lazy"
+          onError={(e) => {
+            e.target.src = '/images/placeholder_portrait.png';
+          }}
         />
 
         <div className="name-mask">
@@ -54,6 +59,9 @@ const CharacterCard = ({ character }) => {
               alt={`${character.name} avatar`}
               className="avatar-image"
               loading="lazy"
+              onError={(e) => {
+                e.target.src = '/images/placeholder_avatar.png';
+              }}
             />
             <div className="tooltip-name-rarity">
               <span className="tooltip-name">{character.name}</span>
@@ -68,12 +76,11 @@ const CharacterCard = ({ character }) => {
               src={elementPath}
               alt={`${character.element} element`}
               className="tooltip-element"
+              onError={(e) => {
+                e.target.src = '/images/Unknown.png';
+              }}
             />
-            <img
-              src={pathPath}
-              alt={`${character.path} path`}
-              className="tooltip-path"
-            />
+            <span className="tooltip-path-text">{character.path}</span>
           </div>
 
           <div className="tooltip-description">
