@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import PillNav from '../components/PillNav';
 import CharacterList from '../components/CharacterList';
-import GradientText from '../components/GradientText'; // Import GradientText
+import GradientText from '../components/GradientText';
+import UserMenu from '../components/UserMenu';
 import { useAuth } from '../context/AuthContext';
-import HSRLogoEvernight from '../assets/HSR_Logo_Evernight.png'; // Import your logo
+import HSRLogoEvernight from '../assets/HSR_Logo_Evernight.png';
+import StellarJadePNG from '../assets/Item_Stellar_Jade.png';
 import '../css/CharacterListPage.css';
+
+const API_URL = 'http://localhost/hsrapp/api';
 
 const CharacterListPage = () => {
   const [characters, setCharacters] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { authToken } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   // Define navigation items
   const navItems = [
@@ -21,26 +26,41 @@ const CharacterListPage = () => {
   ];
 
   useEffect(() => {
-    const mockCharacters = [
-      {
-        name: "Blade",
-        rarity: 5,
-        element: "Wind",
-        path: "Destruction",
-        description: "A member of the Stellaron Hunters who wields the power of wind.",
-        imageName: "Blade"
+    const fetchCharacters = async () => {
+      try {
+        setIsLoading(true);
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+          setError('Please log in to view characters');
+          setIsLoading(false);
+          return;
+        }
+
+        const response = await axios.get(`${API_URL}/management/getCharacter.php`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.data.success) {
+          setCharacters(response.data.characters || []);
+        } else {
+          setError(response.data.error || 'Failed to load characters');
+        }
+      } catch (err) {
+        console.error('Error fetching characters:', err);
+        setError(err.response?.data?.error || 'Failed to load characters. Please try again.');
+      } finally {
+        setIsLoading(false);
       }
-    ];
+    };
 
-    const timer = setTimeout(() => {
-      setCharacters(mockCharacters);
-      setIsLoading(false);
-    }, 500);
+    fetchCharacters();
+  }, [user]);
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="page-container">
         <PillNav
@@ -82,6 +102,8 @@ const CharacterListPage = () => {
 
   return (
     <div className="page-container">
+      <UserMenu stellarJadeIcon={StellarJadePNG} />
+      
       <PillNav
         logo={HSRLogoEvernight}
         logoAlt="Honkai: Star Rail Logo"
