@@ -22,7 +22,8 @@ const CharacterListPage = () => {
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
     { label: 'Character List', href: '/character-list' },
-    { label: 'Gacha Pulling', href: '/gacha-pulling' }
+    { label: 'Gacha Pulling', href: '/gacha-pulling' },
+    { label: 'Credits', href: '/credits' }
   ];
 
   useEffect(() => {
@@ -102,8 +103,6 @@ const CharacterListPage = () => {
 
   return (
     <div className="page-container">
-      <UserMenu stellarJadeIcon={StellarJadePNG} />
-      
       <PillNav
         logo={HSRLogoEvernight}
         logoAlt="Honkai: Star Rail Logo"
@@ -119,7 +118,7 @@ const CharacterListPage = () => {
           colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
           animationSpeed={3}
           showBorder={false}
-          className="Page-Title"
+          className="Page-Title Character-List-Page-Title"
         >
           Character List
         </GradientText>

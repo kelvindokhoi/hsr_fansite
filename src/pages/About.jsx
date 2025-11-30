@@ -14,16 +14,12 @@ function About() {
       <DotGrid 
         dotSize={2} 
         gap={15} 
-        baseColor="#5227FF" 
-        activeColor="#5227FF" 
         proximity={120} 
         shockRadius={250} 
         shockStrength={5} 
         resistance={750} 
         returnDuration={1.5}
       />
-      
-      <UserMenu stellarJadeIcon={StellarJadePNG}/>
       
       <PillNav
         logo={HSRLogoMarch7} 
@@ -32,7 +28,8 @@ function About() {
           { label: 'Home', href: '/' },
           { label: 'About', href: '/about' },
           { label: 'Character List', href: '/character-list' },
-          { label: 'Gacha Pulling', href: '/gacha-pulling' }
+          { label: 'Gacha Pulling', href: '/gacha-pulling' },
+          { label: 'Credits', href: '/credits' }
         ]}
         activeHref="/about" 
         className="custom-nav" 
@@ -54,27 +51,36 @@ function About() {
         
         <div className="about-text">
           <p>
-            Welcome to the Honkai: Star Rail Simulation! This interactive web experience 
-            brings the universe of Honkai: Star Rail to life with stunning visuals and 
-            engaging features.
+            Welcome to the Honkai: Star Rail Fan Site! This interactive web application brings 
+            the universe of Honkai: Star Rail to life with stunning visuals, engaging features, 
+            and an authentic gacha experience.
           </p>
           
-          <h2 className="about-heading">Features</h2>
+          <h2 className="about-heading">🌟 Features</h2>
           <ul>
-            <li>Interactive character roster</li>
-            <li>Gacha simulation system</li>
-            <li>Beautiful animated UI</li>
-            <li>Responsive design</li>
+            <li>Interactive character roster with detailed profiles</li>
+            <li>Realistic gacha pulling simulation with warp mechanics</li>
+            <li>Warp Simulator with visual effects and animations</li>
+            <li>User authentication system</li>
+            <li>Responsive design that works on all devices</li>
+            <li>Stunning visual effects and animations</li>
           </ul>
           
-          <h2 className="about-heading">Technologies Used</h2>
+          <h2 className="about-heading">🛠️ Technologies Used</h2>
           <ul>
-            <li>React</li>
-            <li>GSAP for animations</li>
-            <li>Custom CSS animations</li>
-            <li>React Router</li>
-            <li>ReactBit's Opensource UI components</li>
+            <li><strong>Frontend:</strong> React 18 with Vite</li>
+            <li><strong>State Management:</strong> React Context API</li>
+            <li><strong>Styling:</strong> CSS Modules, Custom Animations</li>
+            <li><strong>Routing:</strong> React Router v6</li>
+            <li><strong>UI Components:</strong> Custom-built with React</li>
+            <li><strong>Build Tool:</strong> Vite</li>
           </ul>
+          
+          <h2 className="about-heading">🎮 How to Use</h2>
+          <p>
+            Navigate through the site using the menu above. Explore characters, 
+            simulate warps, and experience the gacha system without spending any Stellar Jade!
+          </p>
           
           <p style={{ marginTop: '2rem', fontStyle: 'italic', marginBottom: '3rem' }}>
             Made with ❤️ by K.

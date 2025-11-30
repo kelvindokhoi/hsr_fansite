@@ -25,3 +25,9 @@ dist-ssr
 
 # sql dump
 *.sql
+
+# another project dissection experiment (which is not related to this project)
+/public/HSR-Warp-Simulator
+/HSR-Warp-Simulator-master
+
+.gitignore

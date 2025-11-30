@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import HSRLogo from '../assets/hsr_logo.png';
+import HSRLogoCastorice from '../assets/HSR_Logo_Castorice.png'
 import PillNav from '../components/PillNav';
 import GradientText from '../components/GradientText';
 import DotGrid from '../components/DotGrid';
@@ -51,16 +52,15 @@ function Login() {
         returnDuration={1.5}
       />
       
-      <UserMenu stellarJadeIcon={StellarJadePNG}/>
-      
       <PillNav
-        logo={HSRLogo} 
+        logo={HSRLogoCastorice} 
         logoAlt="Honkai: Star Rail Logo"
         items={[
           { label: 'Home', href: '/' },
           { label: 'About', href: '/about' },
           { label: 'Character List', href: '/character-list' },
-          { label: 'Gacha Pulling', href: '/gacha-pulling' }
+          { label: 'Gacha Pulling', href: '/gacha-pulling' },
+          { label: 'Credits', href: '/credits' }
         ]}
         activeHref="/login" 
         className="custom-nav" 

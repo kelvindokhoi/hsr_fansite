@@ -210,6 +210,8 @@ const PillNav = ({
     ['--pill-text']: resolvedPillTextColor
   };
 
+  const { user } = useAuth();
+
   return (
     <div className="pill-nav-container">
       <nav className={`pill-nav ${className}`} aria-label="Primary" style={cssVars}>
@@ -305,6 +307,10 @@ const PillNav = ({
           <span className="hamburger-line" />
           <span className="hamburger-line" />
         </button>
+
+        <div className="user-menu-container">
+          <UserMenu />
+        </div>
       </nav>
 
       <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>

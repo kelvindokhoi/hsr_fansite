@@ -6,6 +6,7 @@
   height: 100%;
   z-index: -1;
   pointer-events: none;
+  background-color: #0f0e1a;
 }
 
 .dot-grid__wrap {

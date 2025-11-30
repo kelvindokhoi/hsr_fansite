@@ -11,19 +11,17 @@ import HSRLogoKafka from "../assets/HSR_Logo_Kafka.png";
 function Home() {
   return (
     <div className="home-page">
-      <DotGrid 
-        dotSize={2} 
-        gap={15} 
-        baseColor="#5227FF" 
-        activeColor="#5227FF" 
-        proximity={120} 
-        shockRadius={250} 
-        shockStrength={5} 
-        resistance={750} 
-        returnDuration={1.5}
-      />
-      
-      <UserMenu stellarJadeIcon={StellarJadePNG}/>
+      <div className="dot-grid-container">
+        <DotGrid 
+          dotSize={2} 
+          gap={15} 
+          proximity={120} 
+          shockRadius={250} 
+          shockStrength={5} 
+          resistance={750} 
+          returnDuration={1.5}
+        />
+      </div>
       
       <PillNav
         logo={HSRLogoKafka} 
@@ -32,7 +30,8 @@ function Home() {
           { label: 'Home', href: '/' },
           { label: 'About', href: '/about' },
           { label: 'Character List', href: '/character-list' },
-          { label: 'Gacha Pulling', href: '/gacha-pulling' }
+          { label: 'Gacha Pulling', href: '/gacha-pulling' },
+          { label: 'Credits', href: '/credits' }
         ]}
         activeHref="/" 
         className="custom-nav" 

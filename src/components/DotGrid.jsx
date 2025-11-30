@@ -31,7 +31,7 @@ function hexToRgb(hex) {
 const DotGrid = ({
   dotSize = 16,
   gap = 32,
-  baseColor = '#5227FF',
+  baseColor = '#3f2d85ff',
   activeColor = '#5227FF',
   proximity = 150,
   speedTrigger = 100,
