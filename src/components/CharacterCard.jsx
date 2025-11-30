@@ -16,14 +16,23 @@ const CharacterCard = ({ character }) => {
 
   const rarityClass = character.rarity === 5 ? 'five-star' : 'four-star';
 
+const getFallbackPath = (type) => {
+  switch(type) {
+    case 'portrait':
+      return '/images/placeholder_portrait.png';
+    case 'avatar':
+      return '/images/placeholder_avatar.png';
+    default:
+      return '/images/Unknown.png';
+  }
+};
+
 const getImagePath = (baseName, type) => {
   return new Promise((resolve) => {
-    const extensions = ['png', 'jpg', 'jpeg'];
+    const extensions = ['png', 'jpg'];
     let currentIndex = 0;
 
-    console.log(`Looking for ${baseName}_${type} with extensions:`, extensions);
-
-    const checkNext = () => {
+    const tryNext = async () => {
       if (currentIndex >= extensions.length) {
         console.log(`No valid image found for ${baseName}_${type}, using fallback`);
         resolve(getFallbackPath(type));
@@ -31,63 +40,72 @@ const getImagePath = (baseName, type) => {
       }
 
       const ext = extensions[currentIndex++];
-      const path = `/images/${baseName}_${type}.${ext}`;
-      console.log(`Checking: ${path}`);
-      
-      const img = new Image();
-      
-      // Set a timeout to handle cases where the image might be taking too long to load
-      const timeoutId = setTimeout(() => {
-        console.log(`Timeout checking: ${path}`);
-        img.onload = img.onerror = null;
-        checkNext();
-      }, 1000); // 1 second timeout
+      // URL encode the path but keep the forward slashes
+      const path = `/images/${encodeURIComponent(baseName)}_${type}.${ext}`.replace(/%2F/g, '/');
+      console.log(`Trying to load: ${path}`);
 
-      img.onload = () => {
-        clearTimeout(timeoutId);
-        console.log(`Found image at: ${path}`);
-        resolve(path);
-      };
-
-      img.onerror = () => {
-        clearTimeout(timeoutId);
-        console.log(`Not found: ${path}`);
-        checkNext();
-      };
-
-      // Start loading the image
-      img.src = path;
-    };
-
-    checkNext();
-  });
-};
-
-  useEffect(() => {
-    const loadImages = async () => {
       try {
-        setIsLoading(true);
-        const [portrait, avatar] = await Promise.all([
-          getImagePath(character.imageName, 'portrait'),
-          getImagePath(character.imageName, 'avatar')
-        ]);
-        
-        setPortraitPath(portrait);
-        setAvatarPath(avatar);
-        setElementPath(`/images/${character.element}.png`);
+        const img = new Image();
+        const timeout = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('timeout')), 1000)
+        );
+
+        const loadImage = new Promise((resolve, reject) => {
+          img.onload = () => resolve(path);
+          img.onerror = () => reject(new Error('load error'));
+          img.src = path;
+        });
+
+        const result = await Promise.race([loadImage, timeout]);
+        console.log(`Found image at: ${result}`);
+        resolve(result);
       } catch (error) {
-        console.error('Error loading images:', error);
-        // Set fallback paths in case of error
-        setPortraitPath('/images/placeholder_portrait.png');
-        setAvatarPath('/images/placeholder_avatar.png');
-        setElementPath('/images/Unknown.png');
-      } finally {
-        setIsLoading(false);
+        console.log(`Failed to load: ${path} - ${error.message}`);
+        tryNext();
       }
     };
 
-    loadImages();
-  }, [character.imageName, character.element]);
+    tryNext();
+  });
+};
+useEffect(() => {
+  let isMounted = true;
+  const abortController = new AbortController();
+
+  const loadImages = async () => {
+    try {
+      setIsLoading(true);
+      const [portrait, avatar] = await Promise.all([
+        getImagePath(character.imageName, 'portrait'),
+        getImagePath(character.imageName, 'avatar')
+      ]);
+
+      if (isMounted) {
+        setPortraitPath(portrait);
+        setAvatarPath(avatar);
+        setElementPath(`/images/${character.element}.png`);
+      }
+    } catch (error) {
+      console.error('Error loading images:', error);
+      if (isMounted) {
+        setPortraitPath('/images/placeholder_portrait.png');
+        setAvatarPath('/images/placeholder_avatar.png');
+        setElementPath('/images/Unknown.png');
+      }
+    } finally {
+      if (isMounted) {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  loadImages();
+
+  return () => {
+    isMounted = false;
+    abortController.abort();
+  };
+}, [character.imageName, character.element]);
 
   if (isLoading) {
     return <div className="character-card loading">Loading...</div>;
