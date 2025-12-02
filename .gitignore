@@ -31,3 +31,8 @@ dist-ssr
 /HSR-Warp-Simulator-master
 
 .gitignore
+
+#fuck you juan
+.env
+.env.example
+supabase.js
