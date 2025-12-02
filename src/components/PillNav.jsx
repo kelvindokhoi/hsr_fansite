@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import UserMenu from './UserMenu';
 import { useAuth } from '../context/AuthContext';
-import PropTypes from 'prop-types'; // Add PropTypes
+import PropTypes from 'prop-types';
 import '/src/css/PillNav.css';
 
 const PillNav = ({
@@ -20,6 +20,9 @@ const PillNav = ({
   onMobileMenuClick,
   initialLoadAnimation = true
 }) => {
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
+  const containerRef = useRef(null);
   const resolvedPillTextColor = pillTextColor ?? baseColor;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const circleRefs = useRef([]);
@@ -31,6 +34,25 @@ const PillNav = ({
   const mobileMenuRef = useRef(null);
   const navItemsRef = useRef(null);
   const logoRef = useRef(null);
+
+  const handleScroll = useCallback(() => {
+    const currentScrollPos = window.pageYOffset;
+    const isVisible = prevScrollPos > currentScrollPos || currentScrollPos < 10;
+
+    setVisible(isVisible);
+    setPrevScrollPos(currentScrollPos);
+
+    if (containerRef.current) {
+      containerRef.current.style.transform = isVisible
+        ? 'translateY(0)'
+        : `translateY(-${containerRef.current.offsetHeight}px)`;
+    }
+  }, [prevScrollPos]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   useEffect(() => {
     const layout = () => {
@@ -77,7 +99,7 @@ const PillNav = ({
     window.addEventListener('resize', onResize);
 
     if (document.fonts?.ready) {
-      document.fonts.ready.then(layout).catch(() => {});
+      document.fonts.ready.then(layout).catch(() => { });
     }
 
     const menu = mobileMenuRef.current;
@@ -207,21 +229,18 @@ const PillNav = ({
     ['--base']: baseColor,
     ['--pill-bg']: pillColor,
     ['--hover-text']: hoveredPillTextColor,
-    ['--pill-text']: resolvedPillTextColor
+    ['--pill-text']: resolvedPillTextColor,
   };
 
-  const { user } = useAuth();
-
   return (
-    <div className="pill-nav-container">
-      <nav className={`pill-nav ${className}`} aria-label="Primary" style={cssVars}>
-        {isRouterLink(items?.[0]?.href) ? ( // Optional chaining for safety
+    <div className={`pill-nav-container ${className}`} ref={containerRef}>
+      <nav className="pill-nav" style={cssVars}>
+        {isRouterLink(items?.[0]?.href) ? (
           <Link
             className="pill-logo"
-            to={items[0]?.href || '#'} // Fallback to '#' if undefined
+            to={items?.[0]?.href || '#'}
             aria-label="Home"
             onMouseEnter={handleLogoEnter}
-            role="menuitem"
             ref={el => {
               logoRef.current = el;
             }}
