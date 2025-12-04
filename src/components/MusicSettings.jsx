@@ -1,15 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import { useAudio } from '../context/AudioContext';
 
-const MusicSettings = ({ songSrc, title }) => {
+const musicTracks = [
+    {
+        id: 1,
+        title: 'Ripples of Past Reverie',
+        path: '/audio/1764867051_Ripples of Past Reverie (English Ver.)_I7MNqnkTRKc_default.wav'
+    },
+    {
+        id: 2,
+        title: 'Where Roses Bloom',
+        path: '/audio/1764866863_Where Roses Bloom (Voice Memo Clip)_3Z-x3ajjuXM_default.wav'
+    },
+    {
+        id: 3,
+        title: 'Kaze ni Naru',
+        path: '/audio/1764867545_kaze ni naru (Instrumental)_cJRMyk44qsA_default.wav'
+    }
+];
+
+const MusicSettings = () => {
     const { playTrack, volume, setVolume, isMuted, toggleMute } = useAudio();
     const [isOpen, setIsOpen] = useState(false);
+    const [currentTrack, setCurrentTrack] = useState(musicTracks[0]);
 
     useEffect(() => {
-        if (songSrc) {
-            playTrack(songSrc);
+        // Initialize audio when component mounts
+        const initAudio = () => {
+            if (currentTrack?.path) {
+                // Force the audio to play when user interacts with the page
+                const playPromise = playTrack(currentTrack.path);
+                
+                // Handle autoplay restrictions
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log('Playback prevented:', error);
+                        // Show a play button or handle the error as needed
+                    });
+                }
+            }
+        };
+
+        // Try to play immediately
+        initAudio();
+
+        // Set up a one-time user interaction listener to handle autoplay restrictions
+        const handleFirstInteraction = () => {
+            initAudio();
+            document.removeEventListener('click', handleFirstInteraction);
+            document.removeEventListener('keydown', handleFirstInteraction);
+            document.removeEventListener('touchstart', handleFirstInteraction);
+        };
+
+        // Add event listeners for user interaction
+        document.addEventListener('click', handleFirstInteraction, { once: true });
+        document.addEventListener('keydown', handleFirstInteraction, { once: true });
+        document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+
+        return () => {
+            // Cleanup event listeners
+            document.removeEventListener('click', handleFirstInteraction);
+            document.removeEventListener('keydown', handleFirstInteraction);
+            document.removeEventListener('touchstart', handleFirstInteraction);
+        };
+    }, [currentTrack, playTrack]);
+
+    const handleTrackChange = (e) => {
+        const selectedTrack = musicTracks.find(track => track.id === parseInt(e.target.value));
+        if (selectedTrack) {
+            setCurrentTrack(selectedTrack);
         }
-    }, [songSrc, playTrack]);
+    };
 
     return (
         <div className="music-settings-container" style={{
@@ -36,11 +97,25 @@ const MusicSettings = ({ songSrc, title }) => {
                         </button>
                     </div>
 
-                    {title && (
-                        <div className="mb-3 text-xs text-blue-300 truncate">
-                            Now Playing: {title}
-                        </div>
-                    )}
+                    <div className="mb-4">
+                        <label className="block text-xs font-medium text-gray-300 mb-1">
+                            Select Track:
+                        </label>
+                        <select
+                            value={currentTrack?.id || ''}
+                            onChange={handleTrackChange}
+                            className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-sm text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                            {musicTracks.map(track => (
+                                <option key={track.id} value={track.id}>
+                                    {track.title}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="mb-3 text-xs text-blue-300 truncate">
+                        Now Playing: {currentTrack?.title || 'No track selected'}
+                    </div>
 
                     <div className="flex items-center gap-2">
                         <button
@@ -78,11 +153,11 @@ const MusicSettings = ({ songSrc, title }) => {
             {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="music-settings-button hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 focus:outline-none flex items-center justify-center"
+                className="music-settings-button hover:bg-gray-700 text-white rounded-full shadow-lg transition-all duration-200 hover:scale-110 focus:outline-none flex items-center justify-center"
                 title="Music Settings"
-                style={{ width: '48px', height: '48px' }}
+                style={{ width: '56px', height: '56px' }}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 18V5l12-2v13"></path>
                     <circle cx="6" cy="18" r="3"></circle>
                     <circle cx="18" cy="16" r="3"></circle>

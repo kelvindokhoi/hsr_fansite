@@ -51,9 +51,10 @@ function About() {
 
         <div className="about-text">
           <p>
-            Welcome to the Honkai: Star Rail Fan Site! This interactive web application brings
-            the universe of Honkai: Star Rail to life with stunning visuals, engaging features,
-            and an authentic gacha experience.
+            Welcome to the Honkai: Star Rail Fan Site! This project was created by passionate fans for the community to explore and enjoy the rich world of Honkai: Star Rail.
+          </p>
+          <p>
+            Our goal is to provide an interactive and immersive experience that celebrates the characters, stories, and gameplay of Honkai: Star Rail.
           </p>
 
           <h2 className="about-heading">🌟 Features</h2>
@@ -61,10 +62,14 @@ function About() {
             <li>Interactive character roster with detailed profiles</li>
             <li>Realistic gacha pulling simulation with warp mechanics</li>
             <li>Warp Simulator with visual effects and animations</li>
+            <li>In-game music player with multiple tracks from the official soundtrack</li>
             <li>User authentication system</li>
             <li>Responsive design that works on all devices</li>
             <li>Stunning visual effects and animations</li>
           </ul>
+          <p className="note">
+            <strong>Tip:</strong> Access the music player in the top-left corner to control the background music while browsing.
+          </p>
 
           <h2 className="about-heading">🛠️ Technologies Used</h2>
           <ul>

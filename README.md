@@ -13,6 +13,7 @@ An interactive fan-made web application for Honkai: Star Rail, featuring a chara
 - **Interactive Character Roster** - Browse detailed profiles of your favorite Honkai: Star Rail characters
 - **Gacha Simulation** - Experience the thrill of the gacha system with realistic warp mechanics
 - **Warp Simulator** - Visual and audio effects that mimic the in-game experience
+- **In-Game Music Player** - Enjoy the official Honkai: Star Rail soundtrack while browsing
 - **Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
 - **User Authentication** - Save your favorite characters and pull history
 
@@ -90,4 +91,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ by [Your Name] | [Twitter](https://twitter.com/yourusername) | [GitHub](https://github.com/yourusername)
+Made with ❤️ by [Kelvin] | [LinkedIn](https://linkedin.com/in/kelvindokhoi/) | [GitHub](https://https://github.com/kelvindokhoi)
