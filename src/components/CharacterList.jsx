@@ -108,7 +108,7 @@ const CharacterList = ({ characters }) => {
 
   // Available elements and paths for filtering
   const availableElements = ['Fire', 'Ice', 'Imaginary', 'Lightning', 'Physical', 'Quantum', 'Wind'];
-  const availablePaths = ['Abundance', 'Destruction', 'Erudition', 'Harmony', 'Nihility', 'Preservation', 'The Hunt'];
+  const availablePaths = ['Abundance', 'Destruction', 'Erudition', 'Harmony', 'Nihility', 'Preservation', 'Hunt','Remembrance'];
 
   return (
     <div className="character-list-container">
