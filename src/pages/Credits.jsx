@@ -6,23 +6,24 @@ import StellarJadePNG from '../assets/Item_Stellar_Jade.png';
 import HSRLogoRobin from '../assets/HSR_Logo_Robin1.png'
 import HSRLogoMarch7 from "../assets/HSR_Logo_March7.png";
 import PillNav from '../components/PillNav';
+import MusicSettings from '../components/MusicSettings';
 import '../css/Credits.css';
 
 function Credits() {
   return (
     <div className="credits-page">
-      <DotGrid 
-        dotSize={2} 
-        gap={15} 
-        proximity={120} 
-        shockRadius={250} 
-        shockStrength={5} 
-        resistance={750} 
+      <DotGrid
+        dotSize={2}
+        gap={15}
+        proximity={120}
+        shockRadius={250}
+        shockStrength={5}
+        resistance={750}
         returnDuration={1.5}
       />
-      
+
       <PillNav
-        logo={HSRLogoRobin} 
+        logo={HSRLogoRobin}
         logoAlt="Honkai: Star Rail Logo"
         items={[
           { label: 'Home', href: '/' },
@@ -31,24 +32,24 @@ function Credits() {
           { label: 'Gacha Pulling', href: '/gacha-pulling' },
           { label: 'Credits', href: '/credits' }
         ]}
-        activeHref="/credits" 
-        className="custom-nav" 
-        baseColor="#753eceff" 
-        pillColor="#ffffff" 
-        hoveredPillTextColor="#ffffff" 
+        activeHref="/credits"
+        className="custom-nav"
+        baseColor="#753eceff"
+        pillColor="#ffffff"
+        hoveredPillTextColor="#ffffff"
         pillTextColor="#000000"
       />
-      
+
       <div className="credits-content">
-        <GradientText 
-          colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]} 
-          animationSpeed={3} 
-          showBorder={false} 
+        <GradientText
+          colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+          animationSpeed={3}
+          showBorder={false}
           className="Page-Title"
         >
           Credits & Acknowledgments
         </GradientText>
-        
+
         <div className="credits-text">
           <section className="credits-section">
             <h2>Open Source Projects</h2>
@@ -75,7 +76,7 @@ function Credits() {
               </li>
             </ul>
           </section>
-          
+
           <section className="credits-section">
             <h2>AI Assistance</h2>
             <p>This project was made possible with the help of the following AI assistants:</p>
@@ -85,7 +86,7 @@ function Credits() {
               <li><strong>Mistral AI</strong> - For creative suggestions and UI/UX improvements</li>
             </ul>
           </section>
-          
+
           <section className="credits-section">
             <h2>Assets & Resources</h2>
             <ul>
@@ -93,17 +94,21 @@ function Credits() {
               <li>Icons from various open source icon libraries</li>
             </ul>
           </section>
-          
+
           <section className="disclaimer">
             <h3>Disclaimer</h3>
             <p>
-              This is a fan-made project and is not affiliated with or endorsed by miHoYo or HoYoverse. 
-              Honkai: Star Rail is a registered trademark of miHoYo Co., Ltd. All game content and materials 
+              This is a fan-made project and is not affiliated with or endorsed by miHoYo or HoYoverse.
+              Honkai: Star Rail is a registered trademark of miHoYo Co., Ltd. All game content and materials
               are trademarks and copyrights of their respective owners.
             </p>
           </section>
         </div>
       </div>
+      <MusicSettings
+        songSrc="/audio/1764867051_Ripples of Past Reverie (English Ver.)_I7MNqnkTRKc_default.wav"
+        title="Ripples of Past Reverie"
+      />
     </div>
   );
 }
