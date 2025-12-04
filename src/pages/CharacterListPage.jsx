@@ -4,7 +4,6 @@ import PillNav from '../components/PillNav';
 import CharacterList from '../components/CharacterList';
 import GradientText from '../components/GradientText';
 import UserMenu from '../components/UserMenu';
-import MusicSettings from '../components/MusicSettings';
 import { useAuth } from '../context/AuthContext';
 import HSRLogoEvernight from '../assets/HSR_Logo_Evernight.png';
 import StellarJadePNG from '../assets/Item_Stellar_Jade.png';
@@ -125,10 +124,6 @@ const CharacterListPage = () => {
         </GradientText>
         <CharacterList characters={characters} />
       </div>
-      <MusicSettings
-        songSrc="/audio/1764866863_Where Roses Bloom (Voice Memo Clip)_3Z-x3ajjuXM_default.wav"
-        title="Where Roses Bloom"
-      />
     </div>
   );
 };

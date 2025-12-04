@@ -4,7 +4,6 @@ import PillNav from '../components/PillNav';
 import GradientText from '../components/GradientText.jsx';
 import DotGrid from '../components/DotGrid.jsx';
 import UserMenu from '../components/UserMenu.jsx';
-import MusicSettings from '../components/MusicSettings';
 import '../css/About.css';
 import StellarJadePNG from '../assets/Item_Stellar_Jade.png';
 import HSRLogoMarch7 from "../assets/HSR_Logo_March7.png";
@@ -88,10 +87,6 @@ function About() {
           </p>
         </div>
       </div>
-      <MusicSettings
-        songSrc="/audio/1764867545_kaze ni naru (Instrumental)_cJRMyk44qsA_default.wav"
-        title="Kaze ni Naru"
-      />
     </div>
   );
 }

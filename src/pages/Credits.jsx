@@ -6,7 +6,6 @@ import StellarJadePNG from '../assets/Item_Stellar_Jade.png';
 import HSRLogoRobin from '../assets/HSR_Logo_Robin1.png'
 import HSRLogoMarch7 from "../assets/HSR_Logo_March7.png";
 import PillNav from '../components/PillNav';
-import MusicSettings from '../components/MusicSettings';
 import '../css/Credits.css';
 
 function Credits() {
@@ -105,10 +104,6 @@ function Credits() {
           </section>
         </div>
       </div>
-      <MusicSettings
-        songSrc="/audio/1764867051_Ripples of Past Reverie (English Ver.)_I7MNqnkTRKc_default.wav"
-        title="Ripples of Past Reverie"
-      />
     </div>
   );
 }

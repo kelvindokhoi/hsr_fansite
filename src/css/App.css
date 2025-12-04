@@ -88,3 +88,56 @@ body {
         font-size: 18px;
     }
 }
+
+/* App.css */
+.app-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Ensure the music player stays on top of other content */
+.fixed {
+  position: fixed !important;
+  z-index: 9999 !important; /* Very high z-index to ensure it stays on top */
+}
+
+/* Add smooth transitions for the music panel */
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-in-out;
+  z-index: 10000 !important; /* Higher than the fixed container */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Make sure the music controls are always clickable */
+.music-controls {
+  position: relative;
+  z-index: 1000;
+}
+
+/* Add a subtle backdrop blur for the music panel */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10000 !important; /* Ensure it's above other elements */
+}
+
+/* Ensure the music button is always visible */
+.music-settings-button {
+  position: fixed !important;
+  left: 1.8rem !important;
+  top: 5rem !important;
+  z-index: 10000 !important;
+  background-color: rgba(31, 41, 55, 0.9) !important;
+  border: 1px solid rgba(75, 85, 99, 0.5) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  width: 48px !important;
+  height: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}

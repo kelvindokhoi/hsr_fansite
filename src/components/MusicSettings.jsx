@@ -12,10 +12,20 @@ const MusicSettings = ({ songSrc, title }) => {
     }, [songSrc, playTrack]);
 
     return (
-        <div className="fixed bottom-4 left-4 z-50">
-            {/* Settings Menu */}
+        <div className="music-settings-container" style={{
+            position: 'fixed',
+            left: '1rem',
+            top: '8rem',  /* Changed from 5rem to 11rem to move it down by 60 pixels */
+            zIndex: 10000,
+            display: 'flex',
+            alignItems: 'flex-start'
+        }}>
             {isOpen && (
-                <div className="absolute bottom-14 left-0 bg-gray-800 text-white p-4 rounded-lg shadow-lg w-64 border border-gray-700 animate-fade-in-up">
+                <div className="bg-gray-800/90 backdrop-blur-sm text-white p-4 rounded-lg shadow-lg w-64 border border-gray-700 animate-fade-in ml-2" style={{
+                    position: 'relative',
+                    zIndex: 10001,
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+                }}>
                     <div className="flex justify-between items-center mb-2">
                         <span className="text-sm font-bold text-gray-300">Music Settings</span>
                         <button
@@ -68,10 +78,11 @@ const MusicSettings = ({ songSrc, title }) => {
             {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full shadow-lg border border-gray-600 transition-all duration-200 hover:scale-110 focus:outline-none"
+                className="music-settings-button hover:bg-gray-700 text-white p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 focus:outline-none flex items-center justify-center"
                 title="Music Settings"
+                style={{ width: '48px', height: '48px' }}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 18V5l12-2v13"></path>
                     <circle cx="6" cy="18" r="3"></circle>
                     <circle cx="18" cy="16" r="3"></circle>
