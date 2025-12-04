@@ -178,4 +178,57 @@
   .tooltip-name {
     font-size: 1rem;
   }
+
+  .element-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .name-mask {
+    padding: 10px 6px 6px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 375px) {
+  .character-name {
+    font-size: 0.85rem;
+  }
+
+  .element-icon {
+    width: 24px;
+    height: 24px;
+    top: 6px;
+    left: 6px;
+  }
+
+  .tooltip {
+    font-size: 0.75rem;
+    padding: 10px;
+  }
+
+  .tooltip-name {
+    font-size: 0.95rem;
+  }
+
+  .avatar-image {
+    width: 40px;
+    height: 40px;
+  }
+
+  .tooltip-description {
+    font-size: 0.8rem;
+    max-height: 100px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .character-card:hover {
+    transform: none;
+  }
+
+  .character-card:active {
+    transform: scale(0.98);
+  }
 }

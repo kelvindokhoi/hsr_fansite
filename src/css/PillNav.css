@@ -63,7 +63,7 @@
     justify-content: space-between;
     padding: 0 0.5rem;
   }
-  
+
   .pill-nav-container {
     padding: 5px 0;
     position: fixed;
@@ -72,7 +72,7 @@
     right: 0;
     z-index: 1000;
   }
-  
+
   .home-page,
   .about-page,
   .credits-page,
@@ -80,15 +80,6 @@
   .warp-simulator-page {
     padding-top: 70px;
   }
-}
-
-.pill-nav-items {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: var(--nav-h);
-  background: var(--base, #000);
-  border-radius: 99px;
 }
 
 .pill-logo {
@@ -120,7 +111,7 @@
   height: 100%;
 }
 
-.pill-list > li {
+.pill-list>li {
   display: flex;
   height: 100%;
 }
@@ -147,7 +138,6 @@
   overflow: hidden;
 }
 
-/* Rest of the CSS stays the same... */
 .pill .hover-circle {
   position: absolute;
   left: 50%;
@@ -213,6 +203,45 @@
 
   .mobile-only {
     display: block;
+  }
+
+  /* Larger touch targets for mobile */
+  .mobile-menu-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .pill-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Better mobile menu positioning */
+  .mobile-menu-popover {
+    top: 3.5rem;
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+
+  /* Improved mobile menu links */
+  .mobile-menu-popover .mobile-menu-link {
+    padding: 14px 18px;
+    font-size: 15px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-menu-popover .mobile-menu-link.is-active {
+    background-color: var(--base);
+    color: var(--hover-text, #fff);
+    font-weight: 600;
+  }
+
+  /* User menu container positioning */
+  .user-menu-container {
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -286,4 +315,21 @@
   cursor: pointer;
   background-color: var(--base);
   color: var(--hover-text, #fff);
+}
+
+/* Very small screens (iPhone SE and similar) */
+@media (max-width: 375px) {
+  .pill-nav {
+    padding: 0 0.25rem;
+  }
+
+  .mobile-menu-popover {
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .mobile-menu-popover .mobile-menu-link {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
 }

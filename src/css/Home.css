@@ -8,7 +8,7 @@
 }
 
 /* Fixed background elements */
-.home-page > .dot-grid-container {
+.home-page>.dot-grid-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -27,15 +27,38 @@
     z-index: 1;
     width: 100%;
     max-width: 1200px;
-    padding: 6rem 2rem 2rem; /* Added top padding for fixed navbar */
-    margin-top: 60px; /* Space for fixed navbar */
+    padding: 6rem 2rem 2rem;
+    /* Added top padding for fixed navbar */
+    margin-top: 60px;
+    /* Space for fixed navbar */
     box-sizing: border-box;
 }
 
 /* Adjust UserMenu position */
-.home-page > .user-menu-container {
+.home-page>.user-menu-container {
     position: fixed;
     top: 1rem;
     right: 1rem;
     z-index: 1001;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .home-content {
+        padding: 2rem 1rem 2rem;
+        margin-top: 40px;
+    }
+
+    .home-page>.user-menu-container {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 375px) {
+    .home-content {
+        padding: 1.5rem 0.75rem 1.5rem;
+        margin-top: 30px;
+    }
 }

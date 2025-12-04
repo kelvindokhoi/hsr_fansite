@@ -11,17 +11,18 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Add this to center child elements */
+  align-items: center;
 }
 
 /* Override Page-Title styles for character list page */
 .character-list-page .Page-Title {
-    margin: 2rem 0 2rem 0 !important;
-    padding: 0 !important;
-    min-height: auto !important;
+  margin: 2rem 0 2rem 0 !important;
+  padding: 0 !important;
+  min-height: auto !important;
 }
 
-.loading, .error {
+.loading,
+.error {
   text-align: center;
   padding: 50px 20px;
   font-size: 1.2rem;
@@ -37,10 +38,51 @@
 
 /* Animation for loading */
 @keyframes pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .loading {
   animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .character-list-page {
+    padding: 12px;
+  }
+
+  .character-list-page .Page-Title {
+    margin: 1.5rem 0 1.5rem 0 !important;
+  }
+
+  .loading,
+  .error {
+    padding: 40px 16px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 375px) {
+  .character-list-page {
+    padding: 8px;
+  }
+
+  .character-list-page .Page-Title {
+    margin: 1rem 0 1rem 0 !important;
+  }
+
+  .loading,
+  .error {
+    padding: 30px 12px;
+    font-size: 1rem;
+  }
 }

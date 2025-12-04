@@ -39,7 +39,6 @@
 .warp-frame-container {
   width: 100%;
   height: 650px;
-  /* Increased height */
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -76,7 +75,6 @@
   box-sizing: border-box;
   z-index: 10;
   flex-shrink: 0;
-  /* Prevent shrinking */
 }
 
 .warp-controls-title {
@@ -119,9 +117,7 @@
 .warp-iframe {
   width: 100%;
   height: auto;
-  /* Let flexbox handle height */
   flex-grow: 1;
-  /* Take remaining space */
   border: none;
   background: transparent;
 }
@@ -206,11 +202,22 @@
 
   .warp-frame-container {
     height: 550px;
-    /* Adjusted for tablet */
   }
 
   .warp-subtitle {
     font-size: 1.1rem;
+  }
+
+  .warp-container {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .warp-header {
+    margin-bottom: 2rem;
+  }
+
+  .warp-content {
+    gap: 1.5rem;
   }
 }
 
@@ -221,7 +228,6 @@
 
   .warp-frame-container {
     height: 450px;
-    /* Adjusted for mobile */
   }
 
   .warp-info {
@@ -234,5 +240,56 @@
 
   .warp-info p {
     font-size: 1rem;
+  }
+
+  .warp-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .warp-controls {
+    height: 44px;
+    padding: 0 0.75rem;
+  }
+
+  .warp-controls-title {
+    font-size: 0.8rem;
+  }
+
+  .fullscreen-toggle {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .warp-subtitle {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 375px) {
+  .warp-frame-container {
+    height: 400px;
+  }
+
+  .warp-info {
+    padding: 1.25rem;
+  }
+
+  .warp-info h2 {
+    font-size: 1.35rem;
+  }
+
+  .warp-info p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .fullscreen-toggle span {
+    display: none;
   }
 }

@@ -5,6 +5,7 @@ import UserMenu from './UserMenu';
 import { useAuth } from '../context/AuthContext';
 import PropTypes from 'prop-types';
 import '/src/css/PillNav.css';
+const clickSound = new Audio('/audio/mixkit-modern-technology-select-3124.wav');
 
 const PillNav = ({
   logo,
@@ -20,6 +21,10 @@ const PillNav = ({
   onMobileMenuClick,
   initialLoadAnimation = true
 }) => {
+  const handleItemClick = () => {
+    clickSound.currentTime = 0;
+    clickSound.play();
+  };
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const containerRef = useRef(null);
@@ -273,6 +278,7 @@ const PillNav = ({
                     aria-label={item.ariaLabel || item.label}
                     onMouseEnter={() => handleEnter(i)}
                     onMouseLeave={() => handleLeave(i)}
+                    onClick={handleItemClick}
                   >
                     <span
                       className="hover-circle"
@@ -296,6 +302,7 @@ const PillNav = ({
                     aria-label={item.ariaLabel || item.label}
                     onMouseEnter={() => handleEnter(i)}
                     onMouseLeave={() => handleLeave(i)}
+                    onClick={handleItemClick}
                   >
                     <span
                       className="hover-circle"
@@ -340,7 +347,7 @@ const PillNav = ({
                 <Link
                   to={item.href || '#'} // Fallback to '#' if undefined
                   className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => { setIsMobileMenuOpen(false); handleItemClick(); }}
                 >
                   {item.label}
                 </Link>
@@ -348,7 +355,7 @@ const PillNav = ({
                 <a
                   href={item.href || '#'} // Fallback to '#' if undefined
                   className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => { setIsMobileMenuOpen(false); handleItemClick(); }}
                 >
                   {item.label}
                 </a>
