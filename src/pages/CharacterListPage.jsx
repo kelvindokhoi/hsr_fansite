@@ -22,6 +22,7 @@ const CharacterListPage = () => {
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
     { label: 'Character List', href: '/character-list' },
+    { label: 'Edit Characters', href: '/edit-characters' },
     { label: 'Gacha Pulling', href: '/gacha-pulling' },
     { label: 'Credits', href: '/credits' }
   ];

@@ -8,6 +8,7 @@ import Credits from './pages/Credits';
 import Login from './pages/Login';
 import CharacterListPage from './pages/CharacterListPage';
 import WarpSimulator from './pages/WarpSimulator';
+import EditCharactersPage from './pages/EditCharactersPage';
 import MusicSettings from './components/MusicSettings';
 import './css/App.css';
 
@@ -39,6 +40,14 @@ function App() {
               }
             />
             <Route
+              path="/edit-characters"
+              element={
+                <ProtectedRoute>
+                  <EditCharactersPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/warp-simulator"
               element={
                 <ProtectedRoute>
@@ -58,6 +67,7 @@ function App() {
                   <li>/login</li>
                   <li>/characters</li>
                   <li>/gacha-pulling</li>
+                  <li>/edit-characters</li>
                   <li>/warp-simulator</li>
                 </ul>
               </div>

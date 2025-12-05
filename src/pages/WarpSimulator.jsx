@@ -40,6 +40,7 @@ const WarpSimulator = () => {
           { label: 'Home', href: '/' },
           { label: 'About', href: '/about' },
           { label: 'Character List', href: '/character-list' },
+          { label: 'Edit Characters', href: '/edit-characters' },
           { label: 'Warp Simulator', href: '/warp-simulator' },
           { label: 'Credits', href: '/credits' }
         ]}

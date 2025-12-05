@@ -1,11 +1,7 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+require_once 'config.php';
 
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: X-Requested-With, Content-Type, Origin");
 
 // Database connection
