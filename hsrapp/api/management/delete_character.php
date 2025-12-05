@@ -1,7 +1,85 @@
 <?php
-require_once 'config.php';
+require_once '../../config/database.php';
 
 header("Content-Type: application/json");
+
+// Get token from Authorization header
+$headers = getallheaders();
+$authorization = isset($headers['Authorization'])
+    ? $headers['Authorization']
+    : (isset($headers['authorization']) ? $headers['authorization'] : '');
+
+if (empty($authorization)) {
+    http_response_code(401);
+    echo json_encode(["error" => "No token provided"]);
+    exit();
+}
+
+$token = str_replace('Bearer ', '', $authorization);
+
+// Database connection
+$database = new Database();
+$db = $database->getConnection();
+
+if (!$db) {
+    http_response_code(500);
+    echo json_encode(["error" => "Database connection failed"]);
+    exit();
+}
+
+// INLINE TOKEN VERIFICATION
+try {
+    $decoded = json_decode(base64_decode($token), true);
+
+    if (!$decoded || !isset($decoded['user_id']) || !isset($decoded['exp'])) {
+        throw new Exception("Invalid token format");
+    }
+
+    // Check if token expired
+    if ($decoded['exp'] < time()) {
+        http_response_code(401);
+        echo json_encode(["error" => "Token expired"]);
+        exit();
+    }
+
+    // Fetch admin role ID dynamically
+    $adminRoleQuery = "SELECT id FROM roles WHERE role_name = 'admin' LIMIT 1";
+    $adminStmt = $db->prepare($adminRoleQuery);
+    $adminStmt->execute();
+    $adminRole = $adminStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$adminRole) {
+        throw new Exception("Admin role not found");
+    }
+
+    $adminRoleId = $adminRole['id'];
+
+    // Fetch user including role_id
+    $query = "SELECT role_id FROM users WHERE id = :id LIMIT 1";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(":id", $decoded['user_id'], PDO::PARAM_INT);
+    $stmt->execute();
+
+    if ($stmt->rowCount() === 0) {
+        http_response_code(401);
+        echo json_encode(["error" => "User not found"]);
+        exit();
+    }
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Check if user is admin
+    if ($user['role_id'] != $adminRoleId) {
+        http_response_code(403);
+        echo json_encode(["error" => "Access denied. Admin privileges required."]);
+        exit();
+    }
+
+} catch (Exception $e) {
+    http_response_code(401);
+    echo json_encode(["error" => "Invalid token: " . $e->getMessage()]);
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -21,30 +99,24 @@ try {
     $id = intval($input['id']);
     
     // Get character info before deletion (to remove image)
-    $getSql = "SELECT image FROM characters WHERE id = ?";
-    $getStmt = $conn->prepare($getSql);
-    $getStmt->bind_param('i', $id);
+    $getSql = "SELECT name FROM characters WHERE id = :id";
+    $getStmt = $db->prepare($getSql);
+    $getStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $getStmt->execute();
-    $getResult = $getStmt->get_result();
     
-    if ($getResult->num_rows === 0) {
+    if ($getStmt->rowCount() === 0) {
         echo json_encode(['success' => false, 'message' => 'Character not found']);
         exit();
     }
     
-    $character = $getResult->fetch_assoc();
-    $imageName = $character['image'];
+    $character = $getStmt->fetch(PDO::FETCH_ASSOC);
+    $name = $character['name'];
+    $imageName = strtolower(str_replace(' ', '_', $name)) . '_portrait.jpg';
     
     // Delete character from database
-    $sql = "DELETE FROM characters WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    
-    if ($stmt === false) {
-        echo json_encode(['success' => false, 'message' => 'Database prepare failed: ' . $conn->error]);
-        exit();
-    }
-    
-    $stmt->bind_param('i', $id);
+    $sql = "DELETE FROM characters WHERE id = :id";
+    $stmt = $db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     
     if ($stmt->execute()) {
         // Remove image file if it exists
@@ -60,15 +132,10 @@ try {
             'message' => 'Character deleted successfully'
         ]);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to delete character: ' . $stmt->error]);
+        echo json_encode(['success' => false, 'message' => 'Failed to delete character']);
     }
     
-    $stmt->close();
-    $getStmt->close();
-    
-} catch (Exception $e) {
+} catch (PDOException $e) {
     echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
 }
-
-$conn->close();
 ?>
