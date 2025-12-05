@@ -243,6 +243,14 @@
   overflow: hidden;
 }
 
+.character-filters.collapsed {
+  margin-bottom: 1.5rem;
+}
+
+.character-filters.collapsed .filter-content {
+  display: none;
+}
+
 .filter-header {
   display: flex;
   justify-content: space-between;

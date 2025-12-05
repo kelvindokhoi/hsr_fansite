@@ -11,6 +11,7 @@ const CharacterList = ({ characters }) => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const charactersPerPage = 50;
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   // Get unique elements and paths for filter buttons
   const elements = useMemo(() =>
@@ -113,8 +114,15 @@ const CharacterList = ({ characters }) => {
   return (
     <div className="character-list-container">
       {/* Filter Controls */}
-      <div className="filter-controls">
-        <div className="filter-group">
+      <div className={`filter-controls ${!filtersExpanded ? 'collapsed' : ''}`}>
+        <div className="filter-header" onClick={() => setFiltersExpanded(!filtersExpanded)}>
+          <h3>Filters & Search</h3>
+          <span className={`collapse-icon ${filtersExpanded ? 'expanded' : 'collapsed'}`}>▼</span>
+        </div>
+        
+        {filtersExpanded && (
+        <div className="filter-content">
+          <div className="filter-group">
           <h3>Element</h3>
           <div className="filter-buttons">
             {availableElements.map(element => (
@@ -181,6 +189,8 @@ const CharacterList = ({ characters }) => {
         <button onClick={resetFilters} className="reset-button">
           Reset Filters
         </button>
+        </div>
+        )}
       </div>
 
       {/* Results Count */}
