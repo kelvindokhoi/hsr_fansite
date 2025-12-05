@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({});
 
-const API_URL = 'http://localhost/hsrapp/api';
+const API_URL = 'http://localhost/api';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -28,14 +28,14 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
       return;
     }
-    
+
     try {
       console.log('Verifying token...');
       const response = await axios.get(`${API_URL}/auth/verify.php`, {
         headers: { Authorization: `Bearer ${token}` },
         timeout: 5000 // 5 second timeout
       });
-      
+
       if (response.data && response.data.user) {
         console.log('Token verification successful');
         setUser(response.data.user);
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
       }, {
         timeout: 10000 // 10 second timeout
       });
-      
+
       if (response.data && response.data.token && response.data.user) {
         const { token, user } = response.data;
         localStorage.setItem('token', token);

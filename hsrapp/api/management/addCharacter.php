@@ -1,9 +1,40 @@
 <?php
 require_once '../../config/database.php';
+require_once 'config.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// Disable display errors to prevent JSON corruption
+ini_set('display_errors', 0);
 error_reporting(E_ALL);
+
+$debug_log = [];
+
+function logDebug($message, $data = null) {
+    global $debug_log;
+    $entry = [
+        'timestamp' => date('Y-m-d H:i:s'),
+        'message' => $message,
+        'data' => $data
+    ];
+    $debug_log[] = $entry;
+}
+
+function sendResponse($success, $message, $data = []) {
+    global $debug_log;
+    $response = [
+        'success' => $success,
+        'message' => $message,
+        'debug_log' => $debug_log
+    ];
+    if (!empty($data)) {
+        $response = array_merge($response, $data);
+    }
+    echo json_encode($response);
+    exit();
+}
+
+logDebug("Script started. POST data:", $_POST);
+logDebug("FILES data:", $_FILES);
+
 
 // Get token from Authorization header
 $headers = getallheaders();
@@ -13,8 +44,7 @@ $authorization = isset($headers['Authorization'])
 
 if (empty($authorization)) {
     http_response_code(401);
-    echo json_encode(["error" => "No token provided"]);
-    exit();
+    sendResponse(false, "No token provided");
 }
 
 $token = str_replace('Bearer ', '', $authorization);
@@ -25,8 +55,7 @@ $db = $database->getConnection();
 
 if (!$db) {
     http_response_code(500);
-    echo json_encode(["error" => "Database connection failed"]);
-    exit();
+    sendResponse(false, "Database connection failed");
 }
 
 // INLINE TOKEN VERIFICATION
@@ -40,8 +69,7 @@ try {
     // Check if token expired
     if ($decoded['exp'] < time()) {
         http_response_code(401);
-        echo json_encode(["error" => "Token expired"]);
-        exit();
+        sendResponse(false, "Token expired");
     }
 
     // Fetch admin role ID dynamically
@@ -64,8 +92,7 @@ try {
 
     if ($stmt->rowCount() === 0) {
         http_response_code(401);
-        echo json_encode(["error" => "User not found"]);
-        exit();
+        sendResponse(false, "User not found");
     }
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -73,14 +100,12 @@ try {
     // Check if user is admin
     if ($user['role_id'] != $adminRoleId) {
         http_response_code(403);
-        echo json_encode(["error" => "Access denied. Admin privileges required."]);
-        exit();
+        sendResponse(false, "Access denied. Admin privileges required.");
     }
 
 } catch (Exception $e) {
     http_response_code(401);
-    echo json_encode(["error" => "Invalid token: " . $e->getMessage()]);
-    exit();
+    sendResponse(false, "Invalid token: " . $e->getMessage());
 }
 
 // Get form data
@@ -93,13 +118,12 @@ $description = $_POST['description'] ?? '';
 // Validate required fields
 if (empty($name) || empty($rarity) || empty($element) || empty($path)) {
     http_response_code(400);
-    echo json_encode(["error" => "Missing required fields"]);
-    exit();
+    sendResponse(false, "Missing required fields");
 }
 
 // Handle image upload
 $imageName = null;
-$debug_info = ['files' => $_FILES];
+$debug_info = ['files' => $_FILES]; // Keep for legacy compatibility if needed inside logDebug
 
 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     $imageFile = $_FILES['image'];
@@ -110,66 +134,44 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     // Validate image type
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!in_array($imageType, $allowedTypes)) {
-        echo json_encode(['success' => false, 'message' => 'Invalid image type. Only JPEG, PNG, GIF, and WebP are allowed', 'debug' => $debug_info]);
-        exit();
+        sendResponse(false, "Invalid image type. Only JPEG, PNG, GIF, and WebP are allowed");
     }
     
     // Validate image size (max 5MB)
     if ($imageSize > 5 * 1024 * 1024) {
-        echo json_encode(['success' => false, 'message' => 'Image size too large. Maximum 5MB allowed', 'debug' => $debug_info]);
-        exit();
+        sendResponse(false, "Image size too large. Maximum 5MB allowed");
     }
     
-    // Generate image name based on character name
-    $imageName = strtolower(str_replace(' ', '_', $name)) . '_portrait.jpg';
-    $imagePath = __DIR__ . '/../../../public/images/' . $imageName;
+    // Generate image name based on character name (always png)
+    $imageName = str_replace(' ', '_', $name) . '_portrait.png';
+    $imagePath = IMAGE_UPLOAD_PATH . $imageName;
+    
+    logDebug("Target image path resolved", [
+        'path' => $imagePath,
+        'dir' => dirname($imagePath),
+        'dir_exists' => is_dir(dirname($imagePath)),
+        'dir_writable' => is_writable(dirname($imagePath))
+    ]);
+
     
     // Create directory if it doesn't exist
     $imageDir = dirname($imagePath);
     if (!is_dir($imageDir)) {
         if (!mkdir($imageDir, 0777, true)) {
-            echo json_encode(['success' => false, 'message' => 'Failed to create images directory', 'debug' => $debug_info]);
-            exit();
+            logDebug("Failed to create directory");
+            sendResponse(false, "Failed to create images directory");
         }
     }
     
     // Move and process image
-    if ($imageType === 'image/jpeg' || $imageType === 'image/jpg') {
-        if (!move_uploaded_file($imageTmpName, $imagePath)) {
-            echo json_encode(['success' => false, 'message' => 'Failed to move uploaded file', 'debug' => $debug_info]);
-            exit();
-        }
+    if (move_uploaded_file($imageTmpName, $imagePath)) {
+        logDebug("File moved successfully");
     } else {
-        // Convert non-JPEG images to JPEG
-        $image = null;
-        switch ($imageType) {
-            case 'image/png':
-                $image = imagecreatefrompng($imageTmpName);
-                break;
-            case 'image/gif':
-                $image = imagecreatefromgif($imageTmpName);
-                break;
-            case 'image/webp':
-                $image = imagecreatefromwebp($imageTmpName);
-                break;
-        }
-        
-        if ($image) {
-            // Convert to JPEG with 85% quality
-            if (!imagejpeg($image, $imagePath, 85)) {
-                imagedestroy($image);
-                echo json_encode(['success' => false, 'message' => 'Failed to save converted image', 'debug' => $debug_info]);
-                exit();
-            }
-            imagedestroy($image);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to process image', 'debug' => $debug_info]);
-            exit();
-        }
+        logDebug("Failed to move file", ['tmp' => $imageTmpName, 'dest' => $imagePath]);
+        sendResponse(false, "Failed to move uploaded file");
     }
 } else {
-    $debug_info['upload_skipped'] = true;
-    $debug_info['upload_error'] = $_FILES['image']['error'] ?? 'No image key';
+    logDebug("Upload skipped or error", $_FILES['image']['error'] ?? 'No image key');
 }
 
 try {
@@ -182,23 +184,12 @@ try {
     $stmt->bindParam(':path', $path);
 
     if ($stmt->execute()) {
-        echo json_encode([
-            "success" => true,
-            "message" => "Character added successfully",
-            "id" => $db->lastInsertId(),
-            "debug" => $debug_info
-        ]);
+        sendResponse(true, "Character added successfully", ["id" => $db->lastInsertId()]);
     } else {
-        echo json_encode([
-            "success" => false,
-            "message" => "Failed to add character"
-        ]);
+        sendResponse(false, "Failed to add character");
     }
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode([
-        "error" => "Database error",
-        "details" => $e->getMessage()
-    ]);
+    sendResponse(false, "Database error: " . $e->getMessage());
 }
 ?>

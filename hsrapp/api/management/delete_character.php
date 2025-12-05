@@ -1,5 +1,10 @@
 <?php
 require_once '../../config/database.php';
+require_once 'config.php';
+
+
+// Disable display errors to prevent JSON corruption
+ini_set('display_errors', 0);
 
 header("Content-Type: application/json");
 
@@ -111,7 +116,7 @@ try {
     
     $character = $getStmt->fetch(PDO::FETCH_ASSOC);
     $name = $character['name'];
-    $imageName = strtolower(str_replace(' ', '_', $name)) . '_portrait.jpg';
+    $imageNameBase = str_replace(' ', '_', $name) . '_portrait';
     
     // Delete character from database
     $sql = "DELETE FROM characters WHERE id = :id";
@@ -119,9 +124,10 @@ try {
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     
     if ($stmt->execute()) {
-        // Remove image file if it exists
-        if (!empty($imageName)) {
-            $imagePath = __DIR__ . '/../../../public/images/' . $imageName;
+        // Remove image file if it exists (check both png and jpg)
+        $extensions = ['.png', '.jpg'];
+        foreach ($extensions as $ext) {
+            $imagePath = IMAGE_UPLOAD_PATH . $imageNameBase . $ext;
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }

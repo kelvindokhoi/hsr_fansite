@@ -26,7 +26,7 @@ if (empty($authorization)) {
 $token = str_replace('Bearer ', '', $authorization);
 
 // Verify the token using your existing verify endpoint
-$verifyUrl = 'http://localhost/hsrapp/api/auth/verify.php';
+$verifyUrl = 'http://localhost/api/auth/verify.php';
 $options = [
     'http' => [
         'header' => "Authorization: Bearer $token\r\n",

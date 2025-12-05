@@ -221,7 +221,7 @@ const EditCharactersPage = () => {
   const fetchCharacters = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost/hsrapp/api/management/getCharacter.php', {
+      const response = await fetch('http://localhost/api/management/getCharacter.php', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -273,8 +273,8 @@ const EditCharactersPage = () => {
     try {
       const token = localStorage.getItem('token');
       const url = editingCharacter
-        ? 'http://localhost/hsrapp/api/management/update_character.php'
-        : 'http://localhost/hsrapp/api/management/addCharacter.php';
+        ? 'http://localhost/api/management/update_character.php'
+        : 'http://localhost/api/management/addCharacter.php';
 
       const response = await fetch(url, {
         method: 'POST',
@@ -287,9 +287,11 @@ const EditCharactersPage = () => {
       const result = await response.json();
 
       if (result.success) {
+        console.log("Upload success. Server response:", result);
         await fetchCharacters();
         resetForm();
       } else {
+        console.error("Upload failed. Server response:", result);
         setError(result.message || 'Operation failed');
       }
     } catch (err) {
@@ -304,7 +306,7 @@ const EditCharactersPage = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost/hsrapp/api/management/delete_character.php', {
+      const response = await fetch('http://localhost/api/management/delete_character.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -313,14 +315,26 @@ const EditCharactersPage = () => {
         body: JSON.stringify({ id })
       });
 
-      const result = await response.json();
+      const text = await response.text();
+      let result;
+      try {
+        result = JSON.parse(text);
+      } catch (e) {
+        console.error("Delete failed. Invalid JSON:", text);
+        setError('Server returned invalid data. Check console.');
+        return;
+      }
+
+      console.log("Delete response:", result);
 
       if (result.success) {
         await fetchCharacters();
       } else {
+        console.error("Delete failed:", result);
         setError(result.message || 'Delete failed');
       }
     } catch (err) {
+      console.error("Delete network error:", err);
       setError('Error connecting to server');
     }
   };

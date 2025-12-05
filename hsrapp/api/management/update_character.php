@@ -1,5 +1,10 @@
 <?php
 require_once '../../config/database.php';
+require_once 'config.php';
+
+
+// Disable display errors to prevent JSON corruption
+ini_set('display_errors', 0);
 
 header("Content-Type: application/json");
 
@@ -121,9 +126,9 @@ try {
             exit();
         }
         
-        // Generate image name based on character name
-        $imageName = strtolower(str_replace(' ', '_', $name)) . '_portrait.jpg';
-        $imagePath = __DIR__ . '/../../../public/images/' . $imageName;
+        // Generate image name based on character name (always png)
+        $imageName = str_replace(' ', '_', $name) . '_portrait.png';
+        $imagePath = IMAGE_UPLOAD_PATH . $imageName;
         
         // Create directory if it doesn't exist
         $imageDir = dirname($imagePath);
@@ -135,43 +140,16 @@ try {
         }
         
         // Move and process image
-        if ($imageType === 'image/jpeg' || $imageType === 'image/jpg') {
-            if (!move_uploaded_file($imageTmpName, $imagePath)) {
-                 echo json_encode(['success' => false, 'message' => 'Failed to move uploaded file']);
-                 exit();
-            }
+        if (move_uploaded_file($imageTmpName, $imagePath)) {
+            // Success
         } else {
-            // Convert non-JPEG images to JPEG
-            $image = null;
-            switch ($imageType) {
-                case 'image/png':
-                    $image = imagecreatefrompng($imageTmpName);
-                    break;
-                case 'image/gif':
-                    $image = imagecreatefromgif($imageTmpName);
-                    break;
-                case 'image/webp':
-                    $image = imagecreatefromwebp($imageTmpName);
-                    break;
-            }
-            
-            if ($image) {
-                // Convert to JPEG with 85% quality
-                if (!imagejpeg($image, $imagePath, 85)) {
-                    imagedestroy($image);
-                    echo json_encode(['success' => false, 'message' => 'Failed to save converted image']);
-                    exit();
-                }
-                imagedestroy($image);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'Failed to process image']);
-                exit();
-            }
+            echo json_encode(['success' => false, 'message' => 'Failed to move uploaded file']);
+            exit();
         }
     }
     
-    // Check if character exists
-    $checkSql = "SELECT id FROM characters WHERE id = :id";
+    // Check if character exists and get current name for potential image renaming
+    $checkSql = "SELECT id, name FROM characters WHERE id = :id";
     $checkStmt = $db->prepare($checkSql);
     $checkStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $checkStmt->execute();
@@ -179,6 +157,28 @@ try {
     if ($checkStmt->rowCount() === 0) {
         echo json_encode(['success' => false, 'message' => 'Character not found']);
         exit();
+    }
+    
+    $currentCharacter = $checkStmt->fetch(PDO::FETCH_ASSOC);
+    $oldName = $currentCharacter['name'];
+    
+    // Rename image if name changed and no new image uploaded
+    if ($oldName !== $name && (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK)) {
+        $extensions = ['.png', '.jpg'];
+        $oldBase = str_replace(' ', '_', $oldName) . '_portrait';
+        $newBase = str_replace(' ', '_', $name) . '_portrait';
+        
+        foreach ($extensions as $ext) {
+            $oldPath = IMAGE_UPLOAD_PATH . $oldBase . $ext;
+            $newPath = IMAGE_UPLOAD_PATH . $newBase . $ext;
+            
+            if (file_exists($oldPath)) {
+                if (!rename($oldPath, $newPath)) {
+                    // Log warning but proceed with DB update (or fail? Proceeding is safer for data consistency)
+                    // error_log("Failed to rename $oldPath to $newPath");
+                }
+            }
+        }
     }
     
     // Update character in database
