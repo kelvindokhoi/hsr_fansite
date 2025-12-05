@@ -460,7 +460,7 @@
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
+
   .characters-grid {
     max-height: 400px;
   }
@@ -470,25 +470,25 @@
   .edit-characters-content {
     padding: 10px;
   }
-  
+
   .edit-characters-container {
     gap: 1rem;
   }
-  
+
   .character-form,
   .characters-list {
     padding: 1.5rem;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-  
+
   .form-buttons {
     flex-direction: column;
   }
-  
+
   .characters-grid {
     grid-template-columns: 1fr;
     max-height: 300px;
@@ -496,15 +496,16 @@
 }
 
 @media (max-width: 480px) {
+
   .character-form,
   .characters-list {
     padding: 1rem;
   }
-  
+
   .character-actions {
     flex-direction: column;
   }
-  
+
   .edit-btn,
   .delete-btn {
     width: 100%;
@@ -592,6 +593,12 @@
   right: 0;
   padding: 0.5rem 0.25rem;
   z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.character-card:hover .overlay-info-section {
+  opacity: 1;
 }
 
 .overlay-info-section::before {
@@ -601,11 +608,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, 
-    rgba(64, 255, 170, 0.25) 0%, 
-    rgba(64, 121, 255, 0.25) 50%,
-    rgba(64, 255, 170, 0.25) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(64, 255, 170, 0.25) 0%,
+      rgba(64, 121, 255, 0.25) 50%,
+      rgba(64, 255, 170, 0.25) 100%);
   backdrop-filter: blur(8px);
   border-radius: 6px;
   z-index: -1;
@@ -621,6 +627,12 @@
   display: flex;
   gap: 0.25rem;
   z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.character-card:hover .overlay-actions-section {
+  opacity: 1;
 }
 
 .overlay-actions-section::before {
@@ -630,11 +642,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, 
-    rgba(255, 68, 68, 0.2) 0%, 
-    rgba(255, 102, 102, 0.2) 50%,
-    rgba(255, 68, 68, 0.2) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(255, 68, 68, 0.2) 0%,
+      rgba(255, 102, 102, 0.2) 50%,
+      rgba(255, 68, 68, 0.2) 100%);
   backdrop-filter: blur(6px);
   border-radius: 4px;
   z-index: -1;
@@ -667,6 +678,11 @@
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
   padding: 0.5rem 0.25rem 0.25rem;
   z-index: 2;
+  transition: opacity 0.3s ease;
+}
+
+.character-card:hover .name-mask {
+  opacity: 0;
 }
 
 .character-name {
@@ -674,6 +690,14 @@
   font-size: 0.7rem;
   font-weight: 600;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.overlay-character-name {
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .overlay-info-section .character-details {

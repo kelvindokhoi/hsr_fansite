@@ -141,6 +141,7 @@ const CharacterCard = ({ character, onEdit, onDelete }) => {
 
       {/* Overlay Info Section */}
       <div className="overlay-info-section">
+        <h4 className="overlay-character-name">{character.name}</h4>
         <p className="character-details">{character.element} • {character.path} • {character.rarity}★</p>
         {character.description && (
           <p className="character-description">{character.description}</p>
