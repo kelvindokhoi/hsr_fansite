@@ -77,7 +77,7 @@ const EditCharactersPage = () => {
   };
 
   const elements = ['Fire', 'Ice', 'Imaginary', 'Lightning', 'Physical', 'Quantum', 'Wind'];
-  const paths = ['Abundance', 'Destruction', 'Erudition', 'Harmony', 'Nihility', 'Preservation', 'The Hunt', 'Remembrance'];
+  const paths = ['Abundance', 'Destruction', 'Erudition', 'Harmony', 'Nihility', 'Preservation', 'Hunt', 'Remembrance'];
   const rarities = [4, 5];
 
   // Filter state for existing characters
@@ -584,7 +584,7 @@ const EditCharactersPage = () => {
             <h3>Existing Characters</h3>
             
             {/* Filters Section */}
-            <div className="character-filters">
+            <div className={`character-filters ${!filtersExpanded ? 'collapsed' : ''}`}>
               <div className="filter-header" onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -594,7 +594,6 @@ const EditCharactersPage = () => {
                 <span className={`collapse-icon ${filtersExpanded ? 'expanded' : 'collapsed'}`}>▼</span>
               </div>
               
-              {filtersExpanded && (
                 <div className="filter-content">
                   <div className="filter-search">
                     <input
@@ -655,7 +654,6 @@ const EditCharactersPage = () => {
                     <span>{filteredCharacters.length} of {characters.length} characters</span>
                   </div>
                 </div>
-              )}
             </div>
             
             <div className="characters-grid">
