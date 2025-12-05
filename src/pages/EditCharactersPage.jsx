@@ -89,7 +89,7 @@ const EditCharactersPage = () => {
   });
 
   // State for filters collapse
-  const [filtersExpanded, setFiltersExpanded] = useState(true);
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   useEffect(() => {
     console.log('User object:', user); // Debug log
