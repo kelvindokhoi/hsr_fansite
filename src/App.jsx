@@ -73,10 +73,7 @@ function App() {
               </div>
             } />
           </Routes>
-          <MusicSettings
-            songSrc="/audio/1764867051_Ripples of Past Reverie (English Ver.)_I7MNqnkTRKc_default.wav"
-            title="Ripples of Past Reverie"
-          />
+          <MusicSettings />
         </div>
       </AudioProvider>
     </AuthProvider>

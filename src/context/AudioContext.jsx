@@ -51,12 +51,26 @@ export const AudioProvider = ({ children }) => {
                     clearInterval(fadeIntervalRef.current);
                     audioRef.current.pause();
                     audioRef.current.volume = 0;
-                    startNewTrack(url, fadeInDuration);
+
+                    if (url) {
+                        startNewTrack(url, fadeInDuration);
+                    } else {
+                        // Stop playback completely
+                        setIsPlaying(false);
+                        setCurrentTrack(null);
+                        audioRef.current.src = "";
+                    }
                 }
             }, stepTime);
         } else {
-            // Nothing playing, just start new track
-            startNewTrack(url, fadeInDuration);
+            // Nothing playing
+            if (url) {
+                startNewTrack(url, fadeInDuration);
+            } else {
+                // Ensure state is stopped
+                setIsPlaying(false);
+                setCurrentTrack(null);
+            }
         }
     };
 

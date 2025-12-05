@@ -16,6 +16,11 @@ const musicTracks = [
         id: 3,
         title: 'Kaze ni Naru',
         path: '/audio/1764867545_kaze ni naru (Instrumental)_cJRMyk44qsA_default.wav'
+    },
+    {
+        id: 4,
+        title: 'No Music',
+        path: null
     }
 ];
 
@@ -27,16 +32,21 @@ const MusicSettings = () => {
     useEffect(() => {
         // Initialize audio when component mounts
         const initAudio = () => {
-            if (currentTrack?.path) {
-                // Force the audio to play when user interacts with the page
-                const playPromise = playTrack(currentTrack.path);
-                
-                // Handle autoplay restrictions
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log('Playback prevented:', error);
-                        // Show a play button or handle the error as needed
-                    });
+            if (currentTrack) {
+                if (currentTrack.path) {
+                    // Force the audio to play when user interacts with the page
+                    const playPromise = playTrack(currentTrack.path);
+
+                    // Handle autoplay restrictions
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log('Playback prevented:', error);
+                            // Show a play button or handle the error as needed
+                        });
+                    }
+                } else {
+                    // No Music selected
+                    playTrack(null);
                 }
             }
         };
@@ -77,7 +87,7 @@ const MusicSettings = () => {
             position: 'fixed',
             left: '1rem',
             top: '8rem',  /* Changed from 5rem to 11rem to move it down by 60 pixels */
-            zIndex: 10000,
+            zIndex: 900,
             display: 'flex',
             alignItems: 'flex-start'
         }}>
@@ -114,7 +124,7 @@ const MusicSettings = () => {
                         </select>
                     </div>
                     <div className="mb-3 text-xs text-blue-300 truncate">
-                        Now Playing: {currentTrack?.title || 'No track selected'}
+                        Now Playing: {currentTrack?.title || 'No Music'}
                     </div>
 
                     <div className="flex items-center gap-2">
