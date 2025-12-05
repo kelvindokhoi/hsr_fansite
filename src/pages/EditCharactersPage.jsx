@@ -47,8 +47,8 @@ const EditCharactersPage = () => {
         }
 
         const ext = extensions[currentIndex++];
-        // URL encode the path but keep the forward slashes
-        const path = `/images/${encodeURIComponent(baseName)}_${type}.${ext}`.replace(/%2F/g, '/');
+        // Don't encode the entire path, just create it directly
+        const path = `/images/${baseName}_${type}.${ext}`;
         console.log(`Trying to load: ${path}`);
 
         try {
@@ -79,6 +79,17 @@ const EditCharactersPage = () => {
   const elements = ['Fire', 'Ice', 'Imaginary', 'Lightning', 'Physical', 'Quantum', 'Wind'];
   const paths = ['Abundance', 'Destruction', 'Erudition', 'Harmony', 'Nihility', 'Preservation', 'The Hunt', 'Remembrance'];
   const rarities = [4, 5];
+
+  // Filter state for existing characters
+  const [characterFilters, setCharacterFilters] = useState({
+    elements: [],
+    paths: [],
+    rarities: [4, 5],
+    search: ''
+  });
+
+  // State for filters collapse
+  const [filtersExpanded, setFiltersExpanded] = useState(true);
 
   useEffect(() => {
     console.log('User object:', user); // Debug log
@@ -233,6 +244,52 @@ const EditCharactersPage = () => {
     setIsEditing(false);
   };
 
+  // Filter functions
+  const handleFilterChange = (filterType, value) => {
+    setCharacterFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }));
+  };
+
+  const toggleElementFilter = (element) => {
+    setCharacterFilters(prev => ({
+      ...prev,
+      elements: prev.elements.includes(element)
+        ? prev.elements.filter(e => e !== element)
+        : [...prev.elements, element]
+    }));
+  };
+
+  const togglePathFilter = (path) => {
+    setCharacterFilters(prev => ({
+      ...prev,
+      paths: prev.paths.includes(path)
+        ? prev.paths.filter(p => p !== path)
+        : [...prev.paths, path]
+    }));
+  };
+
+  const toggleRarityFilter = (rarity) => {
+    setCharacterFilters(prev => ({
+      ...prev,
+      rarities: prev.rarities.includes(rarity)
+        ? prev.rarities.filter(r => r !== rarity)
+        : [...prev.rarities, rarity]
+    }));
+  };
+
+  // Filter characters based on filters
+  const filteredCharacters = characters.filter(character => {
+    const matchesElements = characterFilters.elements.length === 0 || characterFilters.elements.includes(character.element);
+    const matchesPaths = characterFilters.paths.length === 0 || characterFilters.paths.includes(character.path);
+    const matchesRarity = characterFilters.rarities.includes(character.rarity);
+    const matchesSearch = characterFilters.search === '' ||
+      character.name.toLowerCase().includes(characterFilters.search.toLowerCase());
+    
+    return matchesElements && matchesPaths && matchesRarity && matchesSearch;
+  });
+
   // Character Card Component with image loading
   const CharacterCard = ({ character, onEdit, onDelete }) => {
     const [portraitPath, setPortraitPath] = useState('');
@@ -286,7 +343,6 @@ const EditCharactersPage = () => {
 
     return (
       <div className={`character-card ${rarityClass}`}>
-        {/* Portrait Section */}
         <div className="portrait-section">
           <img
             src={elementPath}
@@ -313,16 +369,16 @@ const EditCharactersPage = () => {
           </div>
         </div>
 
-        {/* Info Section */}
-        <div className="info-section">
+        {/* Overlay Info Section */}
+        <div className="overlay-info-section">
           <p className="character-details">{character.element} • {character.path} • {character.rarity}★</p>
           {character.description && (
             <p className="character-description">{character.description}</p>
           )}
         </div>
 
-        {/* Actions Section */}
-        <div className="actions-section">
+        {/* Overlay Actions Section */}
+        <div className="overlay-actions-section">
           <button 
             onClick={() => onEdit(character)}
             className="edit-btn"
@@ -526,8 +582,84 @@ const EditCharactersPage = () => {
           {/* Characters List */}
           <div className="characters-list">
             <h3>Existing Characters</h3>
+            
+            {/* Filters Section */}
+            <div className="character-filters">
+              <div className="filter-header" onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setFiltersExpanded(!filtersExpanded);
+              }}>
+                <h4>Filters & Search</h4>
+                <span className={`collapse-icon ${filtersExpanded ? 'expanded' : 'collapsed'}`}>▼</span>
+              </div>
+              
+              {filtersExpanded && (
+                <div className="filter-content">
+                  <div className="filter-search">
+                    <input
+                      type="text"
+                      placeholder="Search characters..."
+                      value={characterFilters.search}
+                      onChange={(e) => handleFilterChange('search', e.target.value)}
+                      className="search-input"
+                    />
+                  </div>
+                  
+                  <div className="filter-group">
+                    <label>Elements:</label>
+                    <div className="filter-buttons">
+                      {elements.map(element => (
+                        <button
+                          key={element}
+                          className={`filter-btn ${characterFilters.elements.includes(element) ? 'active' : ''}`}
+                          onClick={() => toggleElementFilter(element)}
+                        >
+                          {element}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="filter-group">
+                    <label>Paths:</label>
+                    <div className="filter-buttons">
+                      {paths.map(path => (
+                        <button
+                          key={path}
+                          className={`filter-btn ${characterFilters.paths.includes(path) ? 'active' : ''}`}
+                          onClick={() => togglePathFilter(path)}
+                        >
+                          {path}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="filter-group">
+                    <label>Rarity:</label>
+                    <div className="filter-buttons">
+                      {rarities.map(rarity => (
+                        <button
+                          key={rarity}
+                          className={`filter-btn ${characterFilters.rarities.includes(rarity) ? 'active' : ''}`}
+                          onClick={() => toggleRarityFilter(rarity)}
+                        >
+                          {rarity}★
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="filter-results">
+                    <span>{filteredCharacters.length} of {characters.length} characters</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            
             <div className="characters-grid">
-              {characters.map(character => (
+              {filteredCharacters.map(character => (
                 <CharacterCard 
                   key={character.id} 
                   character={character}

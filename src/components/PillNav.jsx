@@ -21,6 +21,7 @@ const PillNav = ({
   onMobileMenuClick,
   initialLoadAnimation = true
 }) => {
+  const [hasAnimated, setHasAnimated] = useState(false);
   const handleItemClick = () => {
     clickSound.currentTime = 0;
     clickSound.play();
@@ -112,7 +113,7 @@ const PillNav = ({
       gsap.set(menu, { visibility: 'hidden', opacity: 0, scaleY: 1 });
     }
 
-    if (initialLoadAnimation) {
+    if (initialLoadAnimation && !hasAnimated) {
       const logo = logoRef.current;
       const navItems = navItemsRef.current;
       if (logo) {
@@ -131,10 +132,11 @@ const PillNav = ({
           ease
         });
       }
+      setHasAnimated(true);
     }
 
     return () => window.removeEventListener('resize', onResize);
-  }, [items, ease, initialLoadAnimation]);
+  }, [items, ease, initialLoadAnimation, hasAnimated]);
 
   const handleEnter = i => {
     const tl = tlRefs.current[i];

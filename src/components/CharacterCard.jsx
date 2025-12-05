@@ -40,8 +40,8 @@ const getImagePath = (baseName, type) => {
       }
 
       const ext = extensions[currentIndex++];
-      // URL encode the path but keep the forward slashes
-      const path = `/images/${encodeURIComponent(baseName)}_${type}.${ext}`.replace(/%2F/g, '/');
+      // Don't encode the entire path, just create it directly
+      const path = `/images/${baseName}_${type}.${ext}`;
       console.log(`Trying to load: ${path}`);
 
       try {
