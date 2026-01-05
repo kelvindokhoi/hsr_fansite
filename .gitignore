@@ -24,7 +24,7 @@ dist-ssr
 *.sw?
 
 # sql dump
-*.sql
+# *.sql
 
 # another project dissection experiment (which is not related to this project)
 /public/HSR-Warp-Simulator
@@ -32,10 +32,13 @@ dist-ssr
 
 .gitignore
 
-#fuck you juan
+#sentitive files
 .env
 .env.example
 supabase.js
 
-#fuck you juan x2
+#the gitignore file
 .gitignore
+
+#sensitive php folder and its env
+/hsrapp_oracle_to_supabase
