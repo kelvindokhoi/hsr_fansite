@@ -30,8 +30,6 @@ dist-ssr
 /public/HSR-Warp-Simulator
 /HSR-Warp-Simulator-master
 
-.gitignore
-
 #sentitive files
 .env
 .env.example

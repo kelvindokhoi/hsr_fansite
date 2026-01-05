@@ -63,17 +63,25 @@ An interactive fan-made web application for Honkai: Star Rail, featuring a chara
 
 ### Database Setup (MySQL via MAMP)
 
-This project requires a local MySQL database and a Node.js backend to enable features such as user data persistence, authentication, and pull history tracking.
+This project requires a local MySQL database and a PHP backend to enable features such as user data persistence, authentication, and pull history tracking.
 
 1. Install and launch **MAMP** (or MAMP PRO).
 
-2. Start the Apache and MySQL servers, then open the following URL in your browser:
+2. Start the Apache and MySQL servers.
+
+3. Copy the **`hsrapp`** folder (which contains all PHP backend files) into MAMP’s web root directory:
+
+   ```
+   MAMP/htdocs/hsrapp
+   ```
+
+4. Open the following URL in your browser:
 
    ```
    http://localhost/phpMyAdmin/
    ```
 
-3. In phpMyAdmin:
+5. In phpMyAdmin:
 
    * Navigate to the **SQL** tab
    * Open and execute the following file:
@@ -84,16 +92,16 @@ This project requires a local MySQL database and a Node.js backend to enable fea
 
    This will create the required database schema and populate it with initial data.
 
-4. Ensure the following backend-related npm packages are installed (they are included in `package.json`):
+6. Ensure the following backend-related npm / server dependencies are installed (they are included in `package.json`):
 
-   * `express` – backend server
+   * `express` – backend server (if applicable)
    * `mysql` / `mysql2` – MySQL database connection
    * `cors` – cross-origin request handling
    * `dotenv` – environment variable management
    * `bcrypt` – password hashing
    * `jsonwebtoken` – authentication tokens
 
-5. Configure your database connection settings (e.g. host, user, password, database name) using environment variables or a configuration file as required by the backend.
+7. Configure your database connection settings (e.g. host, user, password, database name) using environment variables or a configuration file as required by the backend.
 
 ### Running the Application
 
