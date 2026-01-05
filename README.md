@@ -30,9 +30,20 @@ An interactive fan-made web application for Honkai: Star Rail, featuring a chara
 * **Routing**: React Router v6
 * **UI Components**: Custom-built with React
 
-## 📦 Live Deployment Repository
+## 📦 Live / Production Project (Cloud Deployment)
 
+**Live Project Repository:**
 [https://github.com/kelvindokhoi/hsr_fansite_vercel](https://github.com/kelvindokhoi/hsr_fansite_vercel)
+
+This repository contains the **production-ready version** of the Honkai: Star Rail Fan Site and documents how the application is deployed in a **cloud-based, free-tier environment** using:
+
+* **Vercel** (frontend hosting)
+* **Oracle Cloud** (backend services)
+* **Supabase (PostgreSQL)** for the production database
+
+The Vercel project’s README intentionally **points back to this original repository** and walks through the story of how the live deployment was set up step-by-step.
+
+> Note: The Vercel/production version includes **minor adjustments to the PHP and JavaScript code** to accommodate structural changes when migrating from **local MySQL** to **cloud-hosted PostgreSQL (Supabase)**.
 
 ## 🛠️ Getting Started
 
